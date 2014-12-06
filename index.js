@@ -7,11 +7,6 @@ var data = '';
 var Rdio = require('node-rdio');
 var rdio = new Rdio(["ppebg64vtgcxat45rhrven46", "9YT2zjhE63"]);
 
-_io.configure(function () {
-  _io.set("transports", ["xhr-polling"]);
-  _io.set("polling duration", 10);
-});
-
 var server =http.createServer(app);
 var io = _io.listen(server);
 
