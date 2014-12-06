@@ -37,18 +37,17 @@ app.post('/', function(req, res){
 
 		if (string.indexOf("play")>=0){
 			
-			// string = string.replace('play+','');
-			// io.emit('chat message', string);
+			string = string.replace('play+','');
+			io.emit('chat message', string);
 
-			// rdio.call('search', {'query': string, 'types': 'artist'}, function(err, data){
-			// 	key = data.result.results[0].topSongsKey;
-			// 	io.emit('music message', key);
-			// });
+			rdio.call('search', {'query': string, 'types': 'artist'}, function(err, data){
+				key = data.result.results[0].topSongsKey;
+				io.emit('music message', key);
+			});
 
 
 			rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
-				token += tok.result;
-				io.emit('music message', token);
+				io.emit('chat message', tok);
 			});
 
 

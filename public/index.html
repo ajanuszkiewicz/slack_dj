@@ -34,7 +34,7 @@ $(document).ready(function() {
       });
 
 //  $('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
-  $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+    $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
 
 
 });
@@ -53,7 +53,7 @@ $(document).ready(function() {
 
   socket.on('music message', function(msg){
     $('#messages').append($('<li>').text(msg));
-    //$('#rdio').rdio().play(msg);
+    $('#rdio').rdio().play(msg);
   });
 
 </script>
