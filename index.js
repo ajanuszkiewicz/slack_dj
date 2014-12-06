@@ -46,8 +46,8 @@ app.post('/', function(req, res){
 			// });
 
 
-			rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, data){
-				toekn += data.result;
+			rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
+				token += tok.result;
 				io.emit('music message', token);
 			});
 
