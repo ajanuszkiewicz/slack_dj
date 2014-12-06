@@ -10,9 +10,10 @@ var rdio = new Rdio(["ppebg64vtgcxat45rhrven46", "9YT2zjhE63"]);
 var server =http.createServer(app);
 var io = _io.listen(server);
 
-io.configure () ->
+io.configure(function () {
   io.set("transports", ["xhr-polling"])
   io.set("polling duration", 10)
+});
 
 app.use(express.static(__dirname + '/public'));
 
