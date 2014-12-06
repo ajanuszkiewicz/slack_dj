@@ -10,10 +10,7 @@ var rdio = new Rdio(["ppebg64vtgcxat45rhrven46", "9YT2zjhE63"]);
 var server =http.createServer(app);
 var io = _io.listen(server);
 
-io.configure(function () {
-  io.set("transports", ["xhr-polling"])
-  io.set("polling duration", 10)
-});
+server.listen(process.env.PORT || 3000);
 
 app.use(express.static(__dirname + '/public'));
 
@@ -64,5 +61,3 @@ io.on('connection', function(socket){
     console.log('message: ' + msg); 
   });
 });
-
-server.listen(process.env.PORT || 3000);
