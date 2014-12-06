@@ -45,10 +45,10 @@ app.post('/', function(req, res){
 			});
 
 
-			// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, data){
-			// 	toekn += data;
-			// 	io.emit('music message', token);
-			// });
+			rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, data){
+				toekn += data.result;
+				io.emit('music message', token);
+			});
 
 
 		}
