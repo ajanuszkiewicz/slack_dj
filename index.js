@@ -46,9 +46,9 @@ app.post('/', function(req, res){
 			});
 
 
-			rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
-				io.emit('chat message', tok);
-			});
+			// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
+			// 	io.emit('chat message', tok);
+			// });
 
 
 		}
