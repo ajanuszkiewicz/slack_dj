@@ -40,18 +40,18 @@ app.post('/', function(req, res){
 			string = string.replace('play+','');
 			io.emit('chat message', string);
 
-			rdio.call('search', {'query': string, 'types': 'artist'}, function(err, data){
+			rdio.call('search', {'query': string, 'types': 'artist, albums, tracks'}, function(err, data){
 				key = data.result.results[0].topSongsKey;
 				io.emit('music message', key);
 			});
 
+			} else if (string.indexOf("stop")>=0) {
+				io.emit('control message', 'stop()');
+			}
 
 			// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
 			// 	io.emit('chat message', tok);
 			// });
-
-
-		}
 
 	    //console.log(data.toString());
 	    console.log(fullstr);
