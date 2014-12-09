@@ -47,7 +47,7 @@ app.post('/', function(req, res){
 
 		} else if (string.indexOf("stop")>=0) {
 			io.emit('control message', 'stop()');
-		} else if (string.indexOf(" by ")>=0) {
+		} else if (string.indexOf("+by+")>=0) {
 
 			aftertext = string.substr(string.indexOf("by") + 1);
 			beforetext = string.substr(0, string.indexOf(','));
