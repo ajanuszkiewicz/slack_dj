@@ -45,9 +45,28 @@ app.post('/', function(req, res){
 				io.emit('music message', key);
 			});
 
-			} else if (string.indexOf("stop")>=0) {
-				io.emit('control message', 'stop()');
+		} else if (string.indexOf("stop")>=0) {
+			io.emit('control message', 'stop()');
+		} else if (string.indexOf(" by ")>=0) {
+
+			aftertext = string.substr(string.indexOf("by") + 1);
+			beforetext = string.substr(0, string.indexOf(','));
+
+			rdio.call('search', {'query': aftertext, 'types': 'artist'}, function(err, data){
+				artistkey = data.result.results[0].key;
+			});
+
+			rdio.call('search', {'query': beforetext, 'types': 'track'}, function(err, data){
+				songkey = data.result.results[0].radio.key;
+				checkkey = data.result.results[0].artistKey;
+			});
+
+			if (artistkey = checkkey){
+				io.emit('music message', songkey);
+			} else {
+				console.log("Cant find");
 			}
+		}
 
 			// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
 			// 	io.emit('chat message', tok);
