@@ -37,17 +37,7 @@ app.post('/', function(req, res){
 
 		if (string.indexOf("play")>=0){
 			
-			string = string.replace('play+','');
-			io.emit('chat message', string);
-
-			rdio.call('search', {'query': string, 'types': 'artist, albums, track'}, function(err, data){
-				key = data.result.results[0].topSongsKey;
-				io.emit('music message', key);
-			});
-
-		} else if (string.indexOf("stop")>=0) {
-			io.emit('control message', 'stop()');
-		} else if (string.indexOf("by")>=0) {
+			if (string.indexOf("by")>=0) {
 
 			aftertext = string.substr(string.indexOf("by") + 1);
 			beforetext = string.substr(0, string.indexOf(','));
@@ -67,10 +57,23 @@ app.post('/', function(req, res){
 			io.emit('chat message', checkkey);
 
 			if (artistkey = checkkey){
-				io.emit('music message', songkey);
+			io.emit('music message', songkey);
 			} else {
-				io.emit('chat message', "Can't find song.");
+			io.emit('chat message', "Can't find song.");
 			}
+			
+			}
+
+			string = string.replace('play+','');
+			io.emit('chat message', string);
+
+			rdio.call('search', {'query': string, 'types': 'artist, albums, track'}, function(err, data){
+				key = data.result.results[0].topSongsKey;
+				io.emit('music message', key);
+			});
+
+		} else if (string.indexOf("stop")>=0) {
+			io.emit('control message', 'stop()');
 		}
 
 			// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
