@@ -40,7 +40,7 @@ app.post('/', function(req, res){
 			string = string.replace('play+','');
 			io.emit('chat message', string);
 
-			rdio.call('search', {'query': string, 'types': 'artist, albums, tracks'}, function(err, data){
+			rdio.call('search', {'query': string, 'types': 'artist, albums, track'}, function(err, data){
 				key = data.result.results[0].topSongsKey;
 				io.emit('music message', key);
 			});
