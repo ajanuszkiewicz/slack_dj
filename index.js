@@ -47,7 +47,7 @@ app.post('/', function(req, res){
 
 		} else if (string.indexOf("stop")>=0) {
 			io.emit('control message', 'stop()');
-		} else if (string.indexOf("+by+")>=0) {
+		} else if (string.indexOf("by")>=0) {
 
 			aftertext = string.substr(string.indexOf("by") + 1);
 			beforetext = string.substr(0, string.indexOf(','));
@@ -56,15 +56,20 @@ app.post('/', function(req, res){
 				artistkey = data.result.results[0].key;
 			});
 
+			io.emit('chat message', artistkey);
+
 			rdio.call('search', {'query': beforetext, 'types': 'track'}, function(err, data){
 				songkey = data.result.results[0].radio.key;
 				checkkey = data.result.results[0].artistKey;
 			});
 
+			io.emit('chat message', songkey);
+			io.emit('chat message', checkkey);
+
 			if (artistkey = checkkey){
 				io.emit('music message', songkey);
 			} else {
-				console.log("Cant find");
+				io.emit('chat message', "Can't find song.");
 			}
 		}
 
