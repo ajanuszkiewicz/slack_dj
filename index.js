@@ -10,6 +10,10 @@ var rdio = new Rdio(["ppebg64vtgcxat45rhrven46", "9YT2zjhE63"]);
 var server =http.createServer(app);
 var io = _io.listen(server);
 
+var	artistkey = "";
+var	songkey = "";
+var	check = "";
+
 server.listen(process.env.PORT || 3000);
 
 app.use(express.static(__dirname + '/public'));
@@ -35,59 +39,91 @@ app.post('/', function(req, res){
 	    fullstr = getQueryVariable(data,'text');
 		string = fullstr.replace('dj:+','');
 
-		if (string.indexOf("play")>=0){
-			
-			if (string.indexOf("by")>=0) {
+		// switch(string) {
+		//     case "play":
+		//         playGeneral(string);
+		//         break;
+		//     case "by":
+		//         playSongAlbum(string);
+		//         break;
+		//     default:
+		        
+		// }
 
-			aftertext = string.substr(string.indexOf("by") + 1);
-			beforetext = string.substr(0, string.indexOf(','));
-
-			rdio.call('search', {'query': aftertext, 'types': 'artist'}, function(err, data){
-				artistkey = data.result.results[0].key;
-			});
-
-			io.emit('chat message', artistkey);
-
-			rdio.call('search', {'query': beforetext, 'types': 'track'}, function(err, data){
-				songkey = data.result.results[0].radio.key;
-				checkkey = data.result.results[0].artistKey;
-			});
-
-			io.emit('chat message', songkey);
-			io.emit('chat message', checkkey);
-
-			if (artistkey = checkkey){
-			io.emit('music message', songkey);
-			} else {
-			io.emit('chat message', "Can't find song.");
-			}
-			
-			}
-
-			string = string.replace('play+','');
-			io.emit('chat message', string);
-
-			rdio.call('search', {'query': string, 'types': 'artist, albums, track'}, function(err, data){
-				key = data.result.results[0].topSongsKey;
-				io.emit('music message', key);
-			});
-
-		} else if (string.indexOf("stop")>=0) {
-			io.emit('control message', 'stop()');
-		}
-
-			// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
-			// 	io.emit('chat message', tok);
-			// });
+		// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
+		// 	io.emit('chat message', tok);
+		// });
 
 	    //console.log(data.toString());
 	    console.log(fullstr);
-
 	    io.emit('chat message', string);
 
-	    data = "";
+
+		playSongAlbum(string);
+	    
   	});
 });
+
+//playSongAlbum ('smells like teen spirit - nirvana');
+playSongAlbum ('bit by bit by mother mother');
+
+function playSongAlbum (request) {
+
+	console.log(request);
+
+	genstring = request.replace('play','');
+	aftertext = genstring.substr(genstring.lastIndexOf("by") + 3);
+	beforetext = genstring.substr(0, genstring.lastIndexOf('by'));
+
+	console.log(aftertext);
+	console.log(beforetext);
+
+	findArtist();
+	findTrack();
+}
+
+function findArtist(){
+	rdio.call('search', {'query': aftertext, 'types': 'artist'}, function (err, data){
+		artistkey = data.result.results[0].key;
+		io.emit('chat message', artistkey);
+	});
+}
+
+function findTrack(){
+	rdio.call('search', {'query': beforetext, 'types': 'track'}, function (err, data){
+		songkey = data.result.results[0].key;
+		check = data.result.results[0].artistKey;
+
+		io.emit('chat message', songkey);
+		io.emit('chat message', check);
+	
+		nextStep();	
+
+	});
+}
+
+function nextStep(){
+				console.log('artistkey: ' + artistkey);
+				console.log('songkey: ' + songkey);
+				console.log('checkkey: ' + check);
+
+
+			if (artistkey == check){
+
+				io.emit('music message', songkey);
+
+				console.log("Success");
+
+			} else {
+
+				io.emit('chat message', "Can't find song.");
+
+				console.log("Fail");
+			}
+
+	data = "";
+}
+
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
