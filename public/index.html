@@ -19,7 +19,6 @@
 <script src="/rdio/swfobject.js"></script>
   <body>
     <div id="rdio"></div>
-    <div id="placeholder"></div>
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
@@ -34,15 +33,23 @@ $(document).ready(function() {
         //$(this).rdio().play('a3354463');
       });
 
+
+      $('#rdio').bind('playingTrackChanged.rdio', function(e, playingTrack, sourcePosition) {
+        if (playingTrack) {
+          // duration = playingTrack.duration;
+          // $('#art').attr('src', playingTrack.icon);
+          // $('#track').text(playingTrack.name);
+          // $('#album').text(playingTrack.album);
+          // $('#artist').text(playingTrack.artist);
+        alert("Change state");
+        }
+        });
+
 //PUBLIC
   //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
 //HEROKU
     $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
-
-$('#rdio').bind('playStateChanged', function (e, playState) {
-  alert("Change State: " + playState);
-});
 
 
 });
