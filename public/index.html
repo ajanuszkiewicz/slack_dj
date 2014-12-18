@@ -40,6 +40,10 @@ $(document).ready(function() {
 //HEROKU
     $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
 
+$('#rdio').bind('playStateChanged', function (e, playState) {
+  alert("Change State: " + playState);
+});
+
 
 });
 
@@ -59,10 +63,6 @@ $(document).ready(function() {
     $('#messages').append($('<li>').text(msg));
     $('#rdio').rdio().play(msg);
   });
-
-$('#placeholder').bind('playStateChanged', function (e, playState) {
-  alert("Change State: " + playState);
-});
 
 </script>
     
