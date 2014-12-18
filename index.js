@@ -39,25 +39,8 @@ app.post('/', function(req, res){
 	    fullstr = getQueryVariable(data,'text');
 		string = fullstr.replace('dj:+','');
 
-		// switch(string) {
-		//     case "play":
-		//         playGeneral(string);
-		//         break;
-		//     case "by":
-		//         playSongAlbum(string);
-		//         break;
-		//     default:
-		        
-		// }
-
-		// rdio.call('getPlaybackToken', {'domain': 'sleepy-earth-2844.herokuapp.com'}, function(err, tok){
-		// 	io.emit('chat message', tok);
-		// });
-
-	    //console.log(data.toString());
 	    console.log(fullstr);
 	    io.emit('chat message', string);
-
 
 		playSongAlbum(string);
 	    
@@ -65,7 +48,7 @@ app.post('/', function(req, res){
 });
 
 //playSongAlbum ('smells like teen spirit - nirvana');
-playSongAlbum ('bit by bit by mother mother');
+//playSongAlbum ('bit by bit by mother mother');
 
 function playSongAlbum (request) {
 
