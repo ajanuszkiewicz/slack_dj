@@ -47,24 +47,30 @@ $(document).ready(function() {
 
 
       $('#rdio').bind('playingTrackChanged.rdio', function(e, playingTrack, sourcePosition) {
-        if (playingTrack = 0) {
+        // if (playingTrack = 0) {
+        //   socket.on('music message', function(msg){
+        //     $('#messages').append($('<li>').text(msg));
+        //     $('#rdio').rdio().play(msg);
+        //   });
+        // } else {
+        //   socket.on('music message', function(msg){
+        //     $('#messages').append($('<li>').text(msg));
+        //     $('#rdio').rdio().queue(msg);
+        //   });
+        // }
+
           socket.on('music message', function(msg){
             $('#messages').append($('<li>').text(msg));
             $('#rdio').rdio().play(msg);
           });
-        } else {
-          socket.on('music message', function(msg){
-            $('#messages').append($('<li>').text(msg));
-            $('#rdio').rdio().queue(msg);
-          });
-        }
+
         });
 
 //LOCAL
-  $('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
+  //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
 //HEROKU
-  //$('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+  $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
 
 
 });
