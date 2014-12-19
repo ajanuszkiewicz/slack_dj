@@ -30,7 +30,7 @@ var playlist = [];
 $(document).ready(function() {
 
       $('#rdio').bind('ready.rdio', function() {
-      $('#rdio').rdio().play();
+      //$('#rdio').rdio().play();
       });
 
 
@@ -63,8 +63,8 @@ socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(key));
   $('#messages').append($('<li>').text(song));
   $('#messages').append($('<li>').text(artist));
-  $('#rdio').rdio().queue(key);
-  //$('#rdio').rdio().play(msg);
+  //$('#rdio').rdio().queue(key);
+  $('#rdio').rdio().play(msg);
 });
 
 </script>
