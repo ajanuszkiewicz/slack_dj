@@ -47,8 +47,6 @@ $(document).ready(function() {
   $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
 
 
-});
-
 var socket = io.connect();
 $('form').submit(function(){
   socket.emit('chat message', $('#m').val());
@@ -79,6 +77,11 @@ socket.on('music message', function(key, song, artist){
 
 
 });
+
+
+});
+
+
 
 </script>
     
