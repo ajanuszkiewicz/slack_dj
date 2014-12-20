@@ -59,15 +59,24 @@ socket.on('chat message', function(msg){
   $('#messages').append($('<li>').text(msg));
 });
 
+var songKey;
+
 socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(key));
   $('#messages').append($('<li>').text(song));
   $('#messages').append($('<li>').text(artist));
-  if ($('#rdio').rdio().sendState() = 1){
-    $('#rdio').rdio().queue(key);
-  } else {
-    $('#rdio').rdio().play(key);
-  }
+  //$('#rdio').rdio().play(key);
+  songKey = key;
+
+  $('#rdio').bind('playStateChanged.rdio', function(e, playState) {
+    if (playState == 0) { // paused
+      $('#rdio').rdio().play(songKey);
+    } else {
+      $('#rdio').rdio().queue(songKey);
+    }
+  });
+
+
 });
 
 </script>
