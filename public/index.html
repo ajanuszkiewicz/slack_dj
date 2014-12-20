@@ -33,13 +33,6 @@ $(document).ready(function() {
       //$('#rdio').rdio().play();
       });
 
-
-      $('#rdio').bind('playingTrackChanged.rdio', function(e, playingTrack, sourcePosition) {
-
-
-
-      });
-
 //LOCAL
   //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
@@ -66,15 +59,15 @@ socket.on('music message', function(key, song, artist){
   //$('#rdio').rdio().play(key);
   songKey = key;
 
-  $('#rdio').bind('playStateChanged.rdio', function(e, playState) {
-    alert(playState);
-    if (playState == 0) { // paused
-      $('#rdio').rdio().play(songKey);
-    } else {
-      $('#rdio').rdio().queue(songKey);
-    }
-  });
+  // if ($('#rdio').rdio().sentState()) { // paused
+  //   $('#rdio').rdio().play(songKey);
+  // } else {
+  //   $('#rdio').rdio().queue(songKey);
+  // }
 
+  $('#rdio').bind('sendState.rdio', function(e, state) {
+    alert(state);
+  });
 
 });
 
