@@ -63,10 +63,10 @@ socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(key));
   $('#messages').append($('<li>').text(song));
   $('#messages').append($('<li>').text(artist));
-  if ($('#rdio').rdio().sendState()){
-    $('#rdio').rdio().play(key);
-  } else {
+  if ($('#rdio').rdio().sendState() = 1){
     $('#rdio').rdio().queue(key);
+  } else {
+    $('#rdio').rdio().play(key);
   }
 });
 
