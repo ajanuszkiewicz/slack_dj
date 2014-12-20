@@ -69,6 +69,7 @@ socket.on('music message', function(key, song, artist){
   songKey = key;
 
   $('#rdio').bind('playStateChanged.rdio', function(e, playState) {
+    alert(playState);
     if (playState == 0) { // paused
       $('#rdio').rdio().play(songKey);
     } else {
