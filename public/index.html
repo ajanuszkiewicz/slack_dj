@@ -34,10 +34,12 @@ $(document).ready(function() {
       });
 
 //LOCAL
-  //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
+  $('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
 //HEROKU
-  $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+  //$('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+
+});
 
 
 var socket = io.connect();
@@ -49,32 +51,29 @@ $('form').submit(function(){
 socket.on('chat message', function(msg){
   $('#messages').append($('<li>').text(msg));
 });
+socket.on('control message', function(msg){
+  if (msg == "skip"){
+  $('#rdio').rdio().next();
+  }
+});
 
-var songKey;
+var counter = 0;
 
 socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(key));
   $('#messages').append($('<li>').text(song));
   $('#messages').append($('<li>').text(artist));
-  //$('#rdio').rdio().play(key);
-  songKey = key;
 
-  // if ($('#rdio').rdio().sentState()) { // paused
-  //   $('#rdio').rdio().play(songKey);
-  // } else {
-  //   $('#rdio').rdio().queue(songKey);
-  // }
+  //$('#rdio').rdio().sendState(function(data){alert(data);});
 
-  $('#rdio').bind('sendState.rdio', function(e, state) {
-    alert(state);
-  });
+  if (counter == 0){
+    $('#rdio').rdio().play(key);
+    counter ++;
+  } else {
+    $('#rdio').rdio().queue(key);
+  }
 
 });
-
-
-});
-
-
 
 </script>
     
