@@ -26,6 +26,7 @@
 <script>
 
 var playlist = [];
+var counter = 0;
 
 $(document).ready(function() {
 
@@ -33,11 +34,17 @@ $(document).ready(function() {
       //$('#rdio').rdio().play();
       });
 
-//LOCAL
+//LOCAL - http://seventhedition.chickenkiller.com:3000 - Gargoyle Computer IP
   //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
 //HEROKU - http://sleepy-earth-2844.herokuapp.com
   $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+
+      $('#rdio').bind('playStateChanged.rdio', function(e, playState) {
+      if (playState == 2){
+        counter = 0;
+      }
+      });
 
 });
 
@@ -56,10 +63,9 @@ socket.on('control message', function(msg){
   $('#rdio').rdio().next();
   } else if (msg == "playing");
     obj = $('#rdio').rdio().sendState();
+    alert(obj);
     socket.emit('control message', obj);
 });
-
-var counter = 0;
 
 socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(key));
