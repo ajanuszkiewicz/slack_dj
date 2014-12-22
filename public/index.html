@@ -34,10 +34,10 @@ $(document).ready(function() {
       });
 
 //LOCAL
-  //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
+  $('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
-//HEROKU
-  $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+//HEROKU - http://sleepy-earth-2844.herokuapp.com
+  //$('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
 
 });
 
@@ -54,7 +54,9 @@ socket.on('chat message', function(msg){
 socket.on('control message', function(msg){
   if (msg == "skip"){
   $('#rdio').rdio().next();
-  }
+  } else if (msg == "playing");
+    obj = $('#rdio').rdio().sendState();
+    socket.emit('control message', obj);
 });
 
 var counter = 0;
