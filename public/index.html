@@ -20,13 +20,15 @@
   <body>
     <div id="rdio"></div>
     <ul id="messages"></ul>
-    <form action="">
+<!--     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    </form> -->
 <script>
 
 var playlist = [];
 var counter = 0;
+var socket = io.connect();
+var duration = 1;
 
 $(document).ready(function() {
 
@@ -35,21 +37,51 @@ $(document).ready(function() {
       });
 
 //LOCAL - http://seventhedition.chickenkiller.com:3000 - Gargoyle Computer IP
-  //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
+  // $('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
 //HEROKU - http://sleepy-earth-2844.herokuapp.com
   $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
 
       $('#rdio').bind('playStateChanged.rdio', function(e, playState) {
-      if (playState == 2){
-        counter = 0;
-      }
+        $('#messages').append($('<li>').text("PlayState: " + playState));
+      // if (playState == 2){
+      //   counter++;
+      //   if (counter==2){
+      //     socket.emit('control message', playState);
+      //     counter = 0;
+      //   }
+      // }
+      socket.emit('control message',playState);
+      });
+
+      $('#rdio').bind('playingTrackChanged.rdio', function(e, playingTrack, sourcePosition) {
+        //$('#messages').append($('<li>').text("Source Position " + sourcePosition));
+        if (playingTrack) {
+          duration = playingTrack.duration;
+          //$('#art').attr('src', playingTrack.icon);
+          //$('#track').text(playingTrack.name);
+          //$('#album').text(playingTrack.album);
+          //$('#artist').text(playingTrack.artist);
+          
+          msg = "Now playing " + playingTrack.name + " by " + playingTrack.artist +".";
+          socket.emit('song message', msg);
+        }
+      });
+
+      $('#rdio').bind('positionChanged.rdio', function(e, position) {
+        posi = position/duration;
+        //posi = (posi).toFixed();
+
+        //$('#messages').append($('<li>').text(posi));
+        if (posi > 1.00){
+          //socket.emit('control message', playState);
+          $('#messages').append($('<li>').text("NEXT"));
+         // socket.emit('control message',posi);
+        }
       });
 
 });
 
-
-var socket = io.connect();
 $('form').submit(function(){
   socket.emit('chat message', $('#m').val());
   $('#m').val('');
@@ -58,28 +90,26 @@ $('form').submit(function(){
 socket.on('chat message', function(msg){
   $('#messages').append($('<li>').text(msg));
 });
-socket.on('control message', function(msg){
-  if (msg == "skip"){
-  $('#rdio').rdio().next();
-  } else if (msg == "playing");
-    obj = $('#rdio').rdio().sendState();
-    alert(obj);
-    socket.emit('control message', obj);
-});
+// socket.on('control message', function(msg){
+//   if (msg == "skip"){
+//   $('#rdio').rdio().next();
+//   }
+// });
 
 socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(key));
   $('#messages').append($('<li>').text(song));
   $('#messages').append($('<li>').text(artist));
+  $('#messages').append($('<li>').text(counter));
 
-  //$('#rdio').rdio().sendState(function(data){alert(data);});
+  // if (counter == 0){
+  //   $('#rdio').rdio().play(key);
+  //   counter ++;
+  // } else {
+  //   $('#rdio').rdio().queue(key);
+  // }
 
-  if (counter == 0){
-    $('#rdio').rdio().play(key);
-    counter ++;
-  } else {
-    $('#rdio').rdio().queue(key);
-  }
+  $('#rdio').rdio().play(key);
 
 });
 
