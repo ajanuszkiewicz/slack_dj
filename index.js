@@ -83,7 +83,6 @@ if (fullstr.search("dj: play") != -1){
 	data = "";
 } else if (fullstr.search("dj: force") != -1){
 	playQueue();
-	songlist.shift();
 	data = "";
 } else {
 	sendBack ("Huh?");
