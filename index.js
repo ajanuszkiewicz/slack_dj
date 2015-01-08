@@ -254,7 +254,7 @@ function playQueue (){
 
 	songlength = songlist.length;
 
-	if (songlength >=  1){
+	if (songlength >  1){
 
 		songlist.shift();
 
