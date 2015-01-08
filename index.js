@@ -83,6 +83,7 @@ if (fullstr.search("dj: play") != -1){
 	data = "";
 } else if (fullstr.search("dj: force") != -1){
 	playQueue();
+	songlist.shift();
 	data = "";
 } else {
 	sendBack ("Huh?");
@@ -269,7 +270,6 @@ function playQueue (){
 		console.log("Songlist Length: " + songlist.length);
 	}else{
 		sendBack("No more songs to play.");
-		songlist.shift();
 	}
 }
 
