@@ -362,7 +362,7 @@ io.on('connection', function(socket){
 	    console.log("Counter: " + counter);
 	    if (counter == 2){
 	    	console.log("Skip Counter: " + skipcounter);
-	    	if (skipcounter != 3 && songlist.length > 2){
+	    	if (skipcounter != 3 && songlist.length > 1){
 	    		counter = 0;
 	    		console.log('MOTHER FUCKER');
 	    		playQueue();
@@ -370,7 +370,7 @@ io.on('connection', function(socket){
 	    		counter = 0;
 	    		sendBack("Last song played.");
 	    		console.log("List Reset");
-	    		songlist.shift();
+	    		songlist = [];
 	    	} else {
 	    		counter = 0;
 	    		skipcounter = 0;
