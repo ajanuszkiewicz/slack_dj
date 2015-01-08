@@ -70,6 +70,7 @@ if (fullstr.search("dj: play") != -1){
 	data = "";
 } else if (fullstr.search("dj: skip") != -1){
 	skipSong();
+	data = "";
 } else if (fullstr.search("dj: random") != -1){
 	string = fullstr.replace('dj: random ','');
 	randomSong(string);
@@ -282,8 +283,6 @@ skipSong = function (){
 		string = "Strike " + skipcounter + "!";
 		sendBack(string);
 	}
-
-	data = "";
 }
 
 function currentSong (){
