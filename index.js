@@ -366,9 +366,9 @@ io.on('connection', function(socket){
 	    		counter = 0;
 	    		console.log('MOTHER FUCKER');
 	    		playQueue();
-	    	} else if (songlist.length == 2){
+	    	} else if (songlist.length == 1){
 	    		counter = 0;
-	    		sendBack("That was the last song queued.");
+	    		sendBack("Last song played.");
 	    		console.log("List Reset");
 	    		songlist.shift();
 	    	} else {
