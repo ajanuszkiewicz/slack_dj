@@ -269,6 +269,7 @@ function playQueue (){
 		console.log("Songlist Length: " + songlist.length);
 	}else{
 		sendBack("No more songs to play.");
+		songlist.shift();
 	}
 }
 
