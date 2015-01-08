@@ -287,6 +287,8 @@ skipSong = function (){
 }
 
 function currentSong (){
+
+	if (songlist.length >= 1){
 	name = songlist[0].songName;
 	artist = songlist[0].artistName;
 	request = songlist[0].requestBy;
@@ -294,17 +296,27 @@ function currentSong (){
 	msg = "Currently playing " + name + " by " + artist + " requested by " + request + ".";
 
 	sendBack(msg);
+	} else{
+		sendBack("No song is playing.");
+	}
+
+
 }	
 
 function printPlaylist(){
 
-		var list = "";
+		if (songlist.length >= 1){
+					var list = "";
 
 		for(var i=0; i<songlist.length; i++) {
 			list += i + ". " + songlist[i].songName + " by " + songlist[i].artistName + " requested by " + songlist[i].requestBy + "\n";
 		}
 
 		sendBack(list);
+	} else {
+		sendBack("No songs queued.");
+	}
+
 }
 
 sendBack = function (msg){
@@ -356,9 +368,9 @@ io.on('connection', function(socket){
 	    		playQueue();
 	    	} else if (songlist.length == 1){
 	    		counter = 0;
-	    		songlist.shift();
 	    		sendBack("That was the last song queued.");
 	    		console.log("List Reset");
+	    		songlist.shift();
 	    	} else {
 	    		counter = 0;
 	    		skipcounter = 0;
@@ -366,13 +378,12 @@ io.on('connection', function(socket){
 	    }
 	  }
 	});
-	socket.on('chat message', function(msg){
-	//console.log('message: ' + msg);
-	//playSongAlbum(msg);
-	//playQueue();
-	});
+	// socket.on('chat message', function(msg){
+	// //console.log('message: ' + msg);
+	// //playSongAlbum(msg);
+	// //playQueue();
+	// });
 	socket.on('song message', function(msg){
 	sendBack(msg);
-	//res.end({'text': msg});
 	});
 });
