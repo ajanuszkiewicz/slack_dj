@@ -20,6 +20,7 @@ var	songkey;
 var songname;
 var	check;
 var skipcounter = 0;
+var counter = 0;
 var songlist = [];
 var reqname;
 
@@ -82,6 +83,7 @@ if (fullstr.search("dj: play") != -1){
 	printPlaylist();
 	data = "";
 } else if (fullstr.search("dj: force") != -1){
+	counter = 0;
 	playQueue();
 	data = "";
 } else {
@@ -351,8 +353,6 @@ sendBack = function (msg){
 musicLogic = function (){
 
 }
-
-var counter = 0;
 
 io.on('connection', function(socket){
 	socket.on('control message', function(msg){
