@@ -362,11 +362,11 @@ io.on('connection', function(socket){
 	    console.log("Counter: " + counter);
 	    if (counter == 2){
 	    	console.log("Skip Counter: " + skipcounter);
-	    	if (skipcounter != 3 && songlist.length > 1){
+	    	if (skipcounter != 3 && songlist.length > 2){
 	    		counter = 0;
 	    		console.log('MOTHER FUCKER');
 	    		playQueue();
-	    	} else if (songlist.length == 1){
+	    	} else if (songlist.length == 2){
 	    		counter = 0;
 	    		sendBack("That was the last song queued.");
 	    		console.log("List Reset");
