@@ -81,7 +81,6 @@ if (fullstr.search("dj: play") != -1){
 	printPlaylist();
 	data = "";
 } else if (fullstr.search("dj: force") != -1){
-	skipcounter = 3;
 	playQueue();
 	data = "";
 } else {
@@ -129,7 +128,6 @@ findArtist = function (input, callback){
         if (err) {
             return;
         } else if (data.result.artist_count == '0'){
-        	//res.send({ "text": "Sorry, I couldn't find that artist." });
         	sendBack ("Sorry, I couldn't find that artist.");
         	return;
         }
