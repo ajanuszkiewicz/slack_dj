@@ -85,6 +85,7 @@ if (fullstr.search("dj: play") != -1){
 	playQueue();
 	data = "";
 } else {
+	sendBack ("Huh?");
 	data = "";
 }
 
