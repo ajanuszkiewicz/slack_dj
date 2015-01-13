@@ -23,6 +23,7 @@ var skipcounter = 0;
 var counter = 0;
 var songlist = [];
 var reqname;
+var status;
 
 
 var sendBack;
@@ -33,6 +34,7 @@ var findTrack;
 var artistTracks;
 var nextStep;
 var skipSong;
+var sendRes;
 
 
 server.listen(process.env.PORT || 3000);
@@ -44,6 +46,7 @@ app.post('/', function(req, res){
   	req.on('data', function(chunk) {
     	data += chunk;
   	});
+
 	req.on('end', function() {
 	    function getQueryVariable(query, variable) {
 	        var vars = query.split('&');
@@ -65,33 +68,39 @@ reqname = getQueryVariable(data,'user_name');
 console.log(fullstr);
 io.emit('chat message', fullstr);
 
-if (fullstr.search("dj: play") != -1){
-	string = fullstr.replace('dj: play ','');
-	playSongAlbum(string);
-	data = "";
-} else if (fullstr.search("dj: skip") != -1){
-	skipSong();
-	data = "";
-} else if (fullstr.search("dj: random") != -1){
-	string = fullstr.replace('dj: random ','');
-	randomSong(string);
-	data = "";
-} else if (fullstr.search("dj: now") != -1){
-	currentSong();
-	data = "";
-} else if (fullstr.search("dj: list") != -1){
-	printPlaylist();
-	data = "";
-} else if (fullstr.search("dj: force") != -1){
-	counter = 0;
-	playQueue();
-	data = "";
+if (status == 1){
+	if (fullstr.search("dj: play") != -1){
+		string = fullstr.replace('dj: play ','');
+		playSongAlbum(string);
+		data = "";
+	} else if (fullstr.search("dj: skip") != -1){
+		skipSong();
+		data = "";
+	} else if (fullstr.search("dj: random") != -1){
+		string = fullstr.replace('dj: random ','');
+		randomSong(string);
+		data = "";
+	} else if (fullstr.search("dj: now") != -1){
+		currentSong();
+		data = "";
+	} else if (fullstr.search("dj: list") != -1){
+		printPlaylist();
+		data = "";
+	} else if (fullstr.search("dj: force") != -1){
+		counter = 0;
+		playQueue();
+		data = "";
+	} else {
+		sendBack ("Huh?");
+		data = "";
+	}
 } else {
-	sendBack ("Huh?");
-	data = "";
+	sendBack ("Not connected.");
 }
 
   	});
+
+  	res.send ();
 });
 
 //playSongAlbum ('smells like teen spirit - nirvana');
@@ -129,13 +138,18 @@ randomSong = function (request) {
 
 findArtist = function (input, callback){
 	rdio.call('search', {'query': input, 'types': 'artist'}, function (err, data){
+
+
         if (err) {
             return;
         } else if (data.result.artist_count == '0'){
+        	//sendBack ("Sorry, I couldn't find that artist.");
+        	//res.send ("Sorry, I couldn't find that artist.");
         	sendBack ("Sorry, I couldn't find that artist.");
         	return;
         }
 
+        
 		artistkey = data.result.results[0].key;
 		artistname = data.result.results[0].name;
 		io.emit('chat message', artistkey);
@@ -355,6 +369,12 @@ musicLogic = function (){
 }
 
 io.on('connection', function(socket){
+
+	status = 1;
+	socket.on('disconnect', function(){
+	  status = 0;
+	});
+
 	socket.on('control message', function(msg){
 	console.log('PlayState: ' + msg);
 	  if (msg == 2){
