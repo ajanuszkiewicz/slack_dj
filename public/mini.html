@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chrome Extension</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/rdio/jquery.rdio.js"></script>
+<script src="/rdio/swfobject.js"></script>
+  <body>
+    <p>Slack DJ</p>
+    <div id="rdio"></div>
+    <p id="song"></p>
+    <p id="artist"></p>
+    <img id="art" src=""></img>
+
+<script>
+
+var playlist = [];
+var counter = 0;
+var socket = io.connect();
+var duration = 1;
+
+$(document).ready(function() {
+
+      $('#rdio').bind('ready.rdio', function() {
+      //$('#rdio').rdio().play();
+      });
+
+//LOCAL - http://seventhedition.chickenkiller.com:3000 - Gargoyle Computer IP
+  $('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
+ 
+//HEROKU - http://sleepy-earth-2844.herokuapp.com
+   //$('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+
+
+      $('#rdio').bind('positionChanged.rdio', function(e, position) {
+        posi = position/duration;
+        //posi = (posi).toFixed();
+
+        //$('#messages').append($('<li>').text(posi));
+      });
+
+});
+
+$('form').submit(function(){
+  socket.emit('chat message', $('#m').val());
+  $('#m').val('');
+  return false;
+});
+socket.on('info message', function(song, artist, art){
+  $('#song').append($('<li>').text(song));
+  $('#artist').append($('<li>').text(artist));
+  $('#art').attr("src", art);
+});
+
+</script>
+    
+  </body>
+</html>

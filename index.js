@@ -18,6 +18,7 @@ var	artistkey;
 var artistname;
 var	songkey;
 var songname;
+var albumart;
 var	check;
 var skipcounter = 0;
 var counter = 0;
@@ -87,7 +88,6 @@ if (status == 1){
 		printPlaylist();
 		data = "";
 	} else if (fullstr.search("dj: force") != -1){
-		counter = 0;
 		playQueue();
 		data = "";
 	} else {
@@ -214,6 +214,7 @@ artistTracks = function (input, callback){
 
 		songkey = obj[0].key;
 		songname = obj[0].name;
+		albumart = obj[0].icon;
 		check = obj[0].artistKey;
 
 		io.emit('chat message', songkey);
@@ -224,7 +225,7 @@ artistTracks = function (input, callback){
 	});
 }
 
-nextStep = function (){
+function nextStep (){
 				console.log('artistkey: ' + artistkey);
 				console.log('songkey: ' + songkey);
 				console.log('checkkey: ' + check);
@@ -234,7 +235,7 @@ nextStep = function (){
 
 				string = "Added " + songname + " by " + artistname + " to play queue.";
 				sendBack (string);
-				songQueue (songkey, songname, artistname, reqname);
+				songQueue (songkey, songname, artistname, albumart, reqname);
 				
 				// if (songlist.length !== false){
 				// 	io.emit('music message', songkey, beforetext, aftertext);
@@ -255,12 +256,13 @@ nextStep = function (){
 }
 
 
-function songQueue (key, name, artist, requester) {
-	songlist.push ({songName: name, artistName: artist, songKey: key, requestBy: requester});
+function songQueue (key, name, artist, art, requester) {
+	songlist.push ({songName: name, artistName: artist, songKey: key, albumArt: art, requestBy: requester});
 	console.log(songlist);
 
 	if (songlist.length ==  1){
 		io.emit('music message', key, name, artist);
+		io.emit('info message', name, artist, art);
 	}else{
 		return;
 	}
@@ -270,17 +272,17 @@ function songQueue (key, name, artist, requester) {
 function playQueue (){
 	console.log("queue called");
 
-	songlength = songlist.length;
-
-	if (songlength >  1){
+	if (songlist.length >  1){
 
 		songlist.shift();
 
 		song = songlist[0].songKey;
 		name = songlist[0].songName;
 		artist = songlist[0].artistName;
+		art = songlist[0].albumArt;
 
 		io.emit('music message', song, name, artist);
+		io.emit('info message', name, artist, art);
 
 		console.log("Songlist Length: " + songlist.length);
 	}else{
@@ -289,7 +291,7 @@ function playQueue (){
 }
 
 
-skipSong = function (){
+function skipSong (){
 	skipcounter ++;
 	msg = "skip";
 	if (skipcounter == 3){
@@ -342,9 +344,9 @@ sendBack = function (msg){
 	var options = {
     hostname: 'hooks.slack.com',
     //LOCAL
-    //path: '/services/T024G0U2X/B0386K1RU/VUrCRWgsRfM7HBWK7AmMht98',
+    path: '/services/T024G0U2X/B0386K1RU/VUrCRWgsRfM7HBWK7AmMht98',
     //HEROKU
-    path: '/services/T024G0U2X/B03A0NR3P/WyCjL8lk0er4SDOPG8fkKlk6',
+    //path: '/services/T024G0U2X/B03A0NR3P/WyCjL8lk0er4SDOPG8fkKlk6',
     method: 'POST',
 	};
 
@@ -364,39 +366,49 @@ sendBack = function (msg){
     console.log(data)
 }
 
-musicLogic = function (){
-
-}
-
 io.on('connection', function(socket){
 
 	status = 1;
-	socket.on('disconnect', function(){
-	  status = 0;
-	});
+	// socket.on('disconnect', function(){
+	//   status = 0;
+	//   counter = 0;
+	//   skipcounter = 0;
+	// });
 
 	socket.on('control message', function(msg){
 	console.log('PlayState: ' + msg);
-	  if (msg == 2){
-	    counter++;
-	    console.log("Counter: " + counter);
-	    if (counter == 2){
-	    	console.log("Skip Counter: " + skipcounter);
-	    	if (skipcounter != 3 && songlist.length > 1){
-	    		counter = 0;
-	    		console.log('MOTHER FUCKER');
-	    		playQueue();
-	    	} else if (songlist.length == 1){
-	    		counter = 0;
-	    		sendBack("Last song played.");
-	    		console.log("List Reset");
-	    		songlist = [];
-	    	} else {
-	    		counter = 0;
-	    		skipcounter = 0;
-	    	}
-	    }
-	  }
+	  // if (msg == 2){
+	  //   counter++;
+	  //   console.log("Counter: " + counter);
+	  //   if (counter == 2){
+	  //   	console.log("Skip Counter: " + skipcounter);
+	  //   	if (skipcounter != 3 && songlist.length > 1){
+	  //   		counter = 0;
+	  //   		console.log('MOTHER FUCKER');
+	  //   		playQueue();
+	  //   	} else if (songlist.length == 1){
+	  //   		counter = 0;
+	  //   		sendBack("Last song played.");
+	  //   		console.log("List Reset");
+	  //   		//songlist = [];
+	  //   	} else {
+	  //   		counter = 0;
+	  //   		skipcounter = 0;
+	  //   	}
+	  //   }
+	  // }
+
+    	if (skipcounter != 3 && songlist.length > 1){
+			playQueue();
+		} else if (songlist.length == 1){
+			sendBack("Last song played.");
+			console.log("List Reset");
+			songlist = [];
+		} else {
+			counter = 0;
+			skipcounter = 0;
+		}
+
 	});
 	// socket.on('chat message', function(msg){
 	// //console.log('message: ' + msg);

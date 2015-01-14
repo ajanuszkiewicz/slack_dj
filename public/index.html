@@ -37,10 +37,10 @@ $(document).ready(function() {
       });
 
 //LOCAL - http://seventhedition.chickenkiller.com:3000 - Gargoyle Computer IP
-  //$('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
+  $('#rdio').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
  
 //HEROKU - http://sleepy-earth-2844.herokuapp.com
-   $('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
+   //$('#rdio').rdio('GB9Ug2P______2R2cHlzNHd5ZXg3Z2M0OXdoaDY3aHdrbnNsZWVweS1lYXJ0aC0yODQ0Lmhlcm9rdWFwcC5jb21ifAjbDmsn12JyvPU0Bb2n');
 
       $('#rdio').bind('playStateChanged.rdio', function(e, playState) {
         $('#messages').append($('<li>').text("PlayState: " + playState));
@@ -51,7 +51,7 @@ $(document).ready(function() {
       //     counter = 0;
       //   }
       // }
-      socket.emit('control message',playState);
+      //socket.emit('control message',playState);
       });
 
       $('#rdio').bind('playingTrackChanged.rdio', function(e, playingTrack, sourcePosition) {
@@ -73,8 +73,8 @@ $(document).ready(function() {
         //posi = (posi).toFixed();
 
         //$('#messages').append($('<li>').text(posi));
-        if (posi > 1.00){
-          //socket.emit('control message', playState);
+        if (posi > 0.99){
+          socket.emit('control message', 2);
           $('#messages').append($('<li>').text("NEXT"));
          // socket.emit('control message',posi);
         }
@@ -101,13 +101,6 @@ socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(song));
   $('#messages').append($('<li>').text(artist));
   $('#messages').append($('<li>').text(counter));
-
-  // if (counter == 0){
-  //   $('#rdio').rdio().play(key);
-  //   counter ++;
-  // } else {
-  //   $('#rdio').rdio().queue(key);
-  // }
 
   $('#rdio').rdio().play(key);
 
