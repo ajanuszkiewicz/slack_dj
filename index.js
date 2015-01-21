@@ -101,7 +101,7 @@ if (status == 1){
 
   	});
 
-  	res.send ("");
+  	//res.send ("");
 });
 
 //playSongAlbum ('smells like teen spirit - nirvana');
@@ -295,7 +295,7 @@ function playQueue (){
 function skipSong (){
 	skipcounter ++;
 	msg = "skip";
-	if (skipcounter == 3){
+	if (skipcounter == 3 && songlist.length > 1){
 		sendBack ("Strike 3! The song has been vetoed by your peers.");
 		playQueue();
 		//skipcounter = 0;
