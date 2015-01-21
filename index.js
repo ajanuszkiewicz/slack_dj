@@ -96,11 +96,12 @@ if (status == 1){
 	}
 } else {
 	sendBack ("Not connected.");
+	data = "";
 }
 
   	});
 
-  	res.send ();
+  	//res.send ();
 });
 
 //playSongAlbum ('smells like teen spirit - nirvana');
