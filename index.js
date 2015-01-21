@@ -101,7 +101,7 @@ if (status == 1){
 
   	});
 
-  	//res.send ();
+  	res.send ("");
 });
 
 //playSongAlbum ('smells like teen spirit - nirvana');
