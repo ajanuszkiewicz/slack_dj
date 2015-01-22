@@ -301,7 +301,7 @@ function skipSong (){
 		playQueue();
 		//skipcounter = 0;
 	} else {
-		if (sonlist.length >1){
+		if (songlist.length >1){
 			string = "Strike " + skipcounter + "!";
 			sendBack(string);
 		} else {
