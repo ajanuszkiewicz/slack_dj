@@ -300,9 +300,14 @@ function skipSong (){
 		sendBack ("Strike 3! The song has been vetoed by your peers.");
 		playQueue();
 		//skipcounter = 0;
-	} else{
-		string = "Strike " + skipcounter + "!";
-		sendBack(string);
+	} else {
+		if (sonlist.length >1){
+			string = "Strike " + skipcounter + "!";
+			sendBack(string);
+		} else {
+			sendBack("No more songs to play.");
+		}
+
 	}
 }
 
