@@ -26,6 +26,7 @@ var counter = 0;
 var songlist = [];
 var reqname;
 var status;
+var statcounter = 0;
 
 
 var sendBack;
@@ -408,9 +409,9 @@ sendBack = function (msg){
 	var options = {
     hostname: 'hooks.slack.com',
     //LOCAL
-    //path: '/services/T024G0U2X/B0386K1RU/VUrCRWgsRfM7HBWK7AmMht98',
+    path: '/services/T024G0U2X/B0386K1RU/VUrCRWgsRfM7HBWK7AmMht98',
     //HEROKU
-    path: '/services/T024G0U2X/B03A0NR3P/WyCjL8lk0er4SDOPG8fkKlk6',
+    //path: '/services/T024G0U2X/B03A0NR3P/WyCjL8lk0er4SDOPG8fkKlk6',
     method: 'POST',
 	};
 
@@ -433,11 +434,17 @@ sendBack = function (msg){
 io.on('connection', function(socket){
 
 	status = 1;
-	// socket.on('disconnect', function(){
-	//   status = 0;
-	//   counter = 0;
-	//   skipcounter = 0;
-	// });
+	statcounter ++;
+	
+	socket.on('disconnect', function(){
+	  statcounter = statcounter - 1;
+	  console.log("statcounter: " + statcounter);
+	  if (statcounter == 0){
+	    status = 0;
+	    skipcounter = 0;
+	    songlist = [];
+	  }
+	});
 
 	socket.on('control message', function(msg){
 	console.log('PlayState: ' + msg);
