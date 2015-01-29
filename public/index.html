@@ -90,11 +90,11 @@ $('form').submit(function(){
 socket.on('chat message', function(msg){
   $('#messages').append($('<li>').text(msg));
 });
-// socket.on('control message', function(msg){
-//   if (msg == "skip"){
-//   $('#rdio').rdio().next();
-//   }
-// });
+socket.on('control message', function(msg){
+  if (msg == "stop"){
+    $('#rdio').rdio().stop();
+  }
+});
 
 socket.on('music message', function(key, song, artist){
   $('#messages').append($('<li>').text(key));

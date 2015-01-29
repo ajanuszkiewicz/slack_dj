@@ -17,6 +17,7 @@ var beforetext;
 var	artistkey;
 var artistname;
 var	songkey;
+var radiokey;
 var songname;
 var albumart;
 var	check;
@@ -36,6 +37,8 @@ var artistTracks;
 var nextStep;
 var skipSong;
 var sendRes;
+var artistRadio;
+var streamArtist;
 
 
 server.listen(process.env.PORT || 3000);
@@ -90,6 +93,10 @@ if (status == 1){
 	} else if (fullstr.search("dj: force") != -1){
 		playQueue();
 		data = "";
+	} else if (fullstr.search("dj: stream") != -1){
+		string = fullstr.replace('dj: stream ','');
+		streamArtist(string);
+		data = "";
 	} else {
 		sendBack ("Huh?");
 		data = "";
@@ -134,6 +141,19 @@ randomSong = function (request) {
 	findArtist(request,function(text1, text2){
 		artistTracks(artistkey,function(text1, text2, text3){
 			nextStep();
+		});
+	});
+}
+
+streamArtist = function (request) {
+
+	console.log(request);
+
+	findArtist(request,function(text1, text2){
+		getRadio(artistkey,function(text1, text2, text3){
+			makeStation(radiokey,function(text1, text2, text3, text4){
+			//nextStep();
+			});
 		});
 	});
 }
@@ -227,6 +247,43 @@ artistTracks = function (input, callback){
 	});
 }
 
+getRadio = function (input, callback){
+
+	rdio.call('getTracksForArtist', {'artist': input, 'count': '1'}, function (err, track){
+		 if (err) {
+		    return;
+		}
+
+		radiokey = track.result[0].radioKey;
+		check = track.result[0].artistKey;
+		console.log('radiokey: ' + radiokey);
+
+	callback(radiokey);
+
+	});
+}
+
+makeStation = function (input, callback){
+
+	rdio.call('generateStation', {'station_key': radiokey, 'count': '3'}, function (err, track){
+		 if (err) {
+		    return;
+		}
+
+		var obj = [];
+
+		for(var i=0; i<track.result.tracks.length; i++) {
+			obj.push(track.result.tracks[i]);
+			console.log('YAY!');
+			songQueue (obj[i].key, obj[i].name, obj[i].artistKey, obj[i].artist, obj[i].icon, reqname);
+			//songlist.push ({songName: obj[i].name, artistName: obj[i].artist, songKey: obj[i].key, artistKey: obj[i].artistKey, albumArt: obj[i].icon, requestBy: reqname});
+		}
+	
+		callback();
+
+	});
+}
+
 function nextStep (){
 				console.log('artistkey: ' + artistkey);
 				console.log('songkey: ' + songkey);
@@ -237,7 +294,7 @@ function nextStep (){
 
 				string = "Added " + songname + " by " + artistname + " to play queue.";
 				sendBack (string);
-				songQueue (songkey, songname, artistname, albumart, reqname);
+				songQueue (songkey, songname, artistkey, artistname, albumart, reqname);
 				
 				// if (songlist.length !== false){
 				// 	io.emit('music message', songkey, beforetext, aftertext);
@@ -258,8 +315,8 @@ function nextStep (){
 }
 
 
-function songQueue (key, name, artist, art, requester) {
-	songlist.push ({songName: name, artistName: artist, songKey: key, albumArt: art, requestBy: requester});
+function songQueue (key, name, akey, artist, art, requester) {
+	songlist.push ({songName: name, artistName: artist, songKey: key, artistKey: akey, albumArt: art, requestBy: requester});
 	console.log(songlist);
 
 	if (songlist.length ==  1){
@@ -408,9 +465,13 @@ io.on('connection', function(socket){
     	if (skipcounter != 3 && songlist.length > 1){
 			playQueue();
 		} else if (songlist.length == 1){
-			sendBack("Last song played.");
-			console.log("List Reset");
+			sendBack("Last song played. Now streaming.");
+			console.log(songlist[0].artistName);
+			song = songlist[0].artistName;
 			songlist = [];
+			streamArtist (song);
+			console.log("List Reset");
+			//io.emit('control message', "stop");
 		} else {
 			counter = 0;
 			skipcounter = 0;
