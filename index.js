@@ -7,7 +7,7 @@ var _io = require('socket.io');
 var data = '';
 
 var Rdio = require('node-rdio');
-var rdio = new Rdio(["ppebg64vtgcxat45rhrven46", "9YT2zjhE63"]);
+var rdio = new Rdio(["ne7wtlb7kzc2fj4ar7byowh4e4", "k1u-aqmrvGrexMiJ-E_q7g"]);
 
 var server =http.createServer(app);
 var io = _io.listen(server);
